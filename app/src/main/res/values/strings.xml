@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Forget Me Not</string>
+    <string name="description">Enter task description: </string>
+    <string name="done">DONE</string>
+    <string name="add_a_task">ADD A TASK</string>
+    <string name="data_time"></string>
+    <string name="description_text"></string>
+</resources>
