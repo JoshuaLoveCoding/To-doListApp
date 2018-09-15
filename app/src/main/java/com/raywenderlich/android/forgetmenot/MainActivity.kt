@@ -5,14 +5,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.IntentFilter
-
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import com.raywenderlich.android.forgetmenot.R.id.dateTimeTextView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private val taskList: MutableList<String> = mutableListOf()
     private val adapter by lazy { makeAdapter(taskList) }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // 2
         super.onCreate(savedInstanceState)
@@ -48,6 +51,11 @@ class MainActivity : AppCompatActivity() {
 
         // 5
         taskListView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> }
+
+        addATaskButton.setOnClickListener {
+            val intent = Intent(this, TaskDescriptionActivity::class.java)
+            startActivityForResult(intent, ADD_TASK_REQUEST)
+        }
     }
 
 
@@ -88,11 +96,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 6
-    fun addTaskClicked(view: View) {
-        val intent = Intent(this, TaskDescriptionActivity::class.java)
-        startActivityForResult(intent, ADD_TASK_REQUEST)
-    }
+        // 6
+        //fun addTaskClicked(view: View) {
+        //    val intent = Intent(this, TaskDescriptionActivity::class.java)
+        //    startActivityForResult(intent, ADD_TASK_REQUEST)
+        //}
 
     // 7
     private fun makeAdapter(list: List<String>): ArrayAdapter<String> =
