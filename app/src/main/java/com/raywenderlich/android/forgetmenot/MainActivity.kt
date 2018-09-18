@@ -52,10 +52,11 @@ class MainActivity : AppCompatActivity() {
         // 5
         taskListView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> }
 
-        addATaskButton.setOnClickListener {
-            val intent = Intent(this, TaskDescriptionActivity::class.java)
-            startActivityForResult(intent, ADD_TASK_REQUEST)
-        }
+//      addATaskButton.setOnClickListener {
+//          val intent = Intent(this, TaskDescriptionActivity::class.java)
+//          startActivityForResult(intent, ADD_TASK_REQUEST)
+//      }
+
     }
 
 
@@ -96,11 +97,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-        // 6
-        //fun addTaskClicked(view: View) {
-        //    val intent = Intent(this, TaskDescriptionActivity::class.java)
-        //    startActivityForResult(intent, ADD_TASK_REQUEST)
-        //}
+    //6
+    fun addTaskClicked(view: View) {
+        val intent = Intent(this, TaskDescriptionActivity::class.java)
+        startActivityForResult(intent, ADD_TASK_REQUEST)
+    }
 
     // 7
     private fun makeAdapter(list: List<String>): ArrayAdapter<String> =
