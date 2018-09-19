@@ -1,6 +1,7 @@
 package com.raywenderlich.android.forgetmenot
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -29,6 +31,9 @@ class MainActivity : AppCompatActivity() {
             return simpleDateFormat.format(now)
         }
     }
+
+    private val PREFS_TASKS = "prefs_tasks"
+    private val KEY_TASKS_LIST = "tasks_list"
 
     private val tickReceiver by lazy { makeBroadcastReceiver() }
 
@@ -57,6 +62,15 @@ class MainActivity : AppCompatActivity() {
 //          startActivityForResult(intent, ADD_TASK_REQUEST)
 //      }
 
+        val savedList = getSharedPreferences(PREFS_TASKS, Context.MODE_PRIVATE).getString(KEY_TASKS_LIST, null)
+        if (savedList != null) {
+            val items = savedList.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            taskList.addAll(items)
+        }
+
+        taskListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            taskSelected(position)
+        }
     }
 
 
@@ -115,6 +129,45 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        // Save all data which you want to persist.
+        val savedList = StringBuilder()
+        for (task in taskList) {
+            savedList.append(task)
+            savedList.append(",")
+        }
+
+        getSharedPreferences(PREFS_TASKS, Context.MODE_PRIVATE).edit()
+                .putString(KEY_TASKS_LIST, savedList.toString()).apply()
+    }
+
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+    }
+
+    private fun taskSelected(position: Int) {
+        // 1
+        AlertDialog.Builder(this)
+                // 2
+                .setTitle(R.string.alert_title)
+                // 3
+                .setMessage(taskList[position])
+                .setPositiveButton(R.string.delete, { _, _ ->
+                    taskList.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                })
+                .setNegativeButton(R.string.cancel, {
+                    dialog, _ -> dialog.cancel()
+                })
+                // 4
+                .create()
+                // 5
+                .show()
     }
 
 }
